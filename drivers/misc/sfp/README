@@ -1,0 +1,41 @@
+-----------------------------
+Description
+-----------------------------
+amzn-sfp.c provides the implementation for Amazon's SFP Driver. This driver is
+used to access/read/write SFP modules installed via front-panel ports of the
+switch.
+
+-----------------------------
+Makefile Changes
+-----------------------------
+obj-$(CONFIG_AMAZON_SFP)+=amzn-sfp.o
+
+-----------------------------
+KConfig Changes
+-----------------------------
+config AMAZON_SFP
+     tristate "Driver for SFP+, QSFP+, QSFP28 and QSFP-DD modules"
+     default n
+     depends on I2C
+     help
+         enables communication with SFP modules
+
+-----------------------------
+DTS Changes
+-----------------------------
+The following property needs to be defined :
+    compatible = "qsfp-dd";  // for QSFP-DD modules
+    compatible = "qsfp28";   // for QSFP28 modules
+
+    Example:
+    ----------
+    i2c@pqr {
+        #address-cells = <0x1>;
+        #size-cells = <0x0>;
+        reg = <0xpqr>;
+        sfp@50 {
+            compatible = "qsfp-dd";
+            reg = <0x50>;
+            label = "sfp_eeprom#1";
+        };
+    };
